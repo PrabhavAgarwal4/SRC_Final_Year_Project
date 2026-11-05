@@ -1,0 +1,27 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "npm",
+      "script": "dev",
+      "problemMatcher": [],
+      "label": "Start Dev Server (Vite)",
+      "detail": "vite",
+      "isBackground": true
+    },
+    {
+      "type": "npm",
+      "script": "test",
+      "problemMatcher": [],
+      "label": "Run Tests (Vitest)",
+      "detail": "vitest run"
+    },
+    {
+      "type": "npm",
+      "script": "build",
+      "problemMatcher": [],
+      "label": "Build Production (Vite)",
+      "detail": "tsc && vite build"
+    }
+  ]
+}
