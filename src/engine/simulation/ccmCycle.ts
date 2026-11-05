@@ -334,9 +334,46 @@ export function executeSynchronousRound(prevState: SimulationState): SimulationS
           if (bounceRes.isTerminatingWholeGrid) {
             // Terminating whole-grid sweep!
             group.isTerminated = true;
-            for (const ag of activeMembers) {
-              ag.status = 'settled';
+
+            // Find all occupied nodes
+            const settledNodeKeys = new Set<string>();
+            for (const ag of agents) {
+              if (ag.status === 'settled') {
+                settledNodeKeys.add(`${ag.currentPos.x},${ag.currentPos.y}`);
+              }
             }
+
+            // Find free grid nodes
+            const freeNodes: Coord[] = [];
+            for (let gy = 0; gy < prevState.gridHeight; gy++) {
+              for (let gx = 0; gx < prevState.gridWidth; gx++) {
+                if (!settledNodeKeys.has(`${gx},${gy}`)) {
+                  freeNodes.push({ x: gx, y: gy });
+                }
+              }
+            }
+
+            // Settle active members across free nodes
+            activeMembers.forEach((ag, idx) => {
+              if (idx < freeNodes.length) {
+                ag.currentPos = { ...freeNodes[idx] };
+              }
+              ag.status = 'settled';
+              ag.settleMeta = {
+                round,
+                stepWhenHeadLeft: ag.step,
+                storedLabel: cloneLabel(ag.label),
+                storedGamma: group.gamma,
+                storedAnchor: { ...group.anchor },
+                storedIdealCorner: { ...group.idealCorner },
+                storedDir: { ...group.direction },
+                storedSubgroup: ag.subgroup,
+                storedEpoch: ag.epoch,
+              };
+              group.settledMemberIds.push(ag.id);
+            });
+            group.activeMemberIds = [];
+
             events.push(
               createSimulationEvent({
                 round,
