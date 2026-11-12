@@ -24,3 +24,15 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Report, Presentation, and Scratch Artifacts (kept locally, not in code repository)
+report/
+figures/
+extracted_images/
+bin/
+generate_deck.py
+*.pptx
+*.pdf
+*.tex
+draft_extracted.txt
+reference_extracted.txt

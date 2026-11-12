@@ -10,7 +10,7 @@ import { ScenarioEditorModal } from './components/Scenarios/ScenarioEditorModal'
 import { useSimulationStore } from './state/simulationStore';
 
 export const App: React.FC = () => {
-  const { theme } = useSimulationStore();
+  const { theme, selectAgent, stepForward } = useSimulationStore();
 
   useEffect(() => {
     if (theme === 'dark') {
@@ -19,6 +19,21 @@ export const App: React.FC = () => {
       document.documentElement.classList.remove('dark');
     }
   }, [theme]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const agentParam = params.get('agent');
+    const stepsParam = params.get('steps');
+    if (stepsParam !== null) {
+      const n = parseInt(stepsParam, 10);
+      for (let i = 0; i < n; i++) {
+        stepForward();
+      }
+    }
+    if (agentParam !== null) {
+      selectAgent(parseInt(agentParam, 10));
+    }
+  }, []);
 
   return (
     <div className="flex flex-col h-screen w-screen bg-slate-100 dark:bg-slate-950 text-slate-900 dark:text-slate-100 overflow-hidden font-sans">

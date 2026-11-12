@@ -81,7 +81,12 @@ Open your browser at `http://localhost:5173`.
 ```bash
 npm test
 ```
-Executes all 32 unit and scenario tests covering geometry, interaction resolution, phase execution, and invariants.
+Executes all 63 automated tests across 9 test suites covering sweep geometry, movement arbitration, state transitions, research scenarios, stress edge cases, and the empirical benchmark suite.
+
+To run specifically the empirical benchmark suite:
+```bash
+npx vitest run tests/benchmark.test.ts
+```
 
 ### 4.4 Build for Production
 ```bash
